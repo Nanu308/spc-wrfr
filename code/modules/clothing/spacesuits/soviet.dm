@@ -78,7 +78,7 @@
 /datum/component/armor_protection_limb/proc/on_equip(obj/item/I, mob/equipper)
 	RegisterSignal(equipper, COMSIG_ATOM_BULLET_ACT, .proc/on_projectile)
 	if(has_overlay)
-		update_overlay()
+		update_overlay(equipper)
 
 /datum/component/armor_protection_limb/proc/on_unequip(obj/item/I, mob/unequipper, slot)
 	if(isitem(parent))
@@ -98,13 +98,13 @@
 		if(91 to INFINITY)
 			return
 		if(61 to 90)
-			usr.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 1)
+			user.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 1)
 		if(31 to 60)
-			usr.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 2)
+			user.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 2)
 		if(6 to 30)
-			usr.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 3)
+			user.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 3)
 		if(-INFINITY to 5)
-			usr.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 4)
+			user.overlay_fullscreen("helmet", /obj/screen/fullscreen/helmet, 4)
 
 
 #define VENTING (1<<1)
@@ -112,7 +112,8 @@
 /datum/component/armor_protection_limb/proc/adjust_health(var/amount)
 	health = CLAMP(health - amount, 0, max_health)
 	if(has_overlay)
-		update_overlay()
+		if(ismob(parent))
+			update_overlay(parent)
 	if(health <= 0)
 		if(CHECK_BITFIELD(venting, TRUE) && !CHECK_BITFIELD(venting, VENTING))
 			ENABLE_BITFIELD(venting, VENTING)
